@@ -5,14 +5,39 @@ import Form from "./components/Form/Form";
 import Header from "./components/Header/Header";
 import ListaItens from "./components/ListaItens/ListaItens";
 import { colors } from "./components/colors";
+import { useState } from "react";
+import { ProdutoItem } from "./interfaces/ProdutoItem";
 
 export default function App() {
+
+   const [lista, setLista] = useState<ProdutoItem[]>([]);
+      const [produto, setProduto] = useState("");
+  
+  
+  
+    function adicionarProduto() {
+      if (produto.trim() === '') {
+        return;
+      }
+     
+  
+    const novoProduto: ProdutoItem = {
+      id: crypto.randomUUID(),
+      nome: produto,
+      comprado: false,
+    };
+  
+    const novaLista = [...lista, novoProduto];
+      setLista(novaLista);
+      setProduto('');
+    }
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
-        <StatusBar style="auto" />
+        <StatusBar style="auto" /> 
         <Header />
-        <Form />
+        <Form adicionarProduto={adicionarProduto} produto={produto} setProduto={setProduto}/> 
         <ListaItens />
       </SafeAreaView>
     </SafeAreaProvider>
