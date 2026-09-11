@@ -32,13 +32,28 @@ export default function App() {
       setProduto('');
     }
 
+    function remover(id: string){
+      const novaLista = lista.filter((item) => item.id !== id);
+      setLista (novaLista);
+      }
+
+    function mudarComprado(id: string){
+      const novaLista = lista.map((item) => {
+        if (item.id ===id){
+          return {...item, comprado: !item.comprado};
+        }
+        return item;
+      });
+      setLista(novaLista);
+    }
+
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <StatusBar style="auto" /> 
         <Header />
         <Form adicionarProduto={adicionarProduto} produto={produto} setProduto={setProduto}/> 
-        <ListaItens />
+        <ListaItens produtos ={lista}/>
       </SafeAreaView>
     </SafeAreaProvider>
   );

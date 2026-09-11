@@ -5,6 +5,8 @@ import { useState } from "react";
 import { ProdutoItem } from "../../interfaces/ProdutoItem";
 import ProdutoListaItem from "../ProdutoListaItem/ProdutoListaItem";
 import { colors } from "../colors";
+import {Form} from "../../components/Form";
+import {App} from "../App";
 
 export const DATA: ProdutoItem[] = [
   {
@@ -34,6 +36,12 @@ export const DATA: ProdutoItem[] = [
   },
 ];
 
+interface ListaItensProps{
+  produtos: ProdutoItem[];
+  remover: (id:string) => void;
+  mudarComprado: (id:string) => void;
+}
+
 export default function ListaItens() {
   const [active, setActive] = useState("presentes");
 
@@ -47,6 +55,8 @@ export default function ListaItens() {
   function alterarActiveParaComprados() {
     setActive("comprados");
   }
+
+
 
   return (
     <View style={styles.container}>
@@ -79,7 +89,12 @@ export default function ListaItens() {
             style={{
               color: active === "comprados" ? colors.azul500 : colors.textSecondary,
             }}
-          >
+
+            onPress={() => concluirTarefa(tarefas.indexOf(tarefa))}> {/*aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*/}
+            <Text style={styles.botaoConcluirTexto}>
+              {tarefa.status ? '✓' : ' '}
+            </Text>
+          
             Comprados
           </Text>
         </TouchableOpacity>
@@ -91,6 +106,19 @@ export default function ListaItens() {
         >
           <Text style={{ color: colors.textSecondary }}>Limpar</Text>
         </TouchableOpacity>
+
+           {/* Botão de concluir tarefa */}
+          <TouchableOpacity
+            style={[
+              styles.botaoConcluir,
+              tarefa.status && styles.botaoConcluirAtivo,
+            ]}
+            onPress={() => concluirTarefa(tarefas.indexOf(tarefa))}>
+            <Text style={styles.botaoConcluirTexto}>
+              {tarefa.status ? '✓' : ' '}
+            </Text>
+          </TouchableOpacity>
+          
       </View>
 
       {/* Lista de itens */}
