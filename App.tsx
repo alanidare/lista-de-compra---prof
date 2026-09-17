@@ -5,18 +5,46 @@ import Form from "./components/Form/Form";
 import Header from "./components/Header/Header";
 import ListaItens from "./components/ListaItens/ListaItens";
 import { colors } from "./components/colors";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ProdutoItem } from "./interfaces/ProdutoItem";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const CHAVE = '@minha_lista_compras';
+
 
 export default function App() {
 
    const [lista, setLista] = useState<ProdutoItem[]>([]);
       const [produto, setProduto] = useState("");
+        const [carregado, setCarregado] = useState(false);
+
+
+       useEffect(() => {
+    async function carregar() {
+      try {
+        const salvas = await AsyncStorage.getItem(CHAVE);
+         if (salvas) setLista(JSON.parse(salvas));
+      } catch (e) {
+        console.log('Falha ao carregar a lista', e);
+      } finally {
+        setCarregado(true);
+      }
+    }
+    carregar();
+  }, []);
+
+  useEffect(() => {
+  if (!carregado) return;
+  AsyncStorage.setItem(CHAVE, JSON.stringify(lista)).catch((e) =>
+    console.log("Falha ao salvar a lista", e)
+  );
+}, [lista, carregado]);
   
   
   
     function adicionarProduto() {
-      if (produto.trim() === '') {
+      const nome = produto.trim();
+      if (nome === " ") {
         return;
       }
      
@@ -26,6 +54,9 @@ export default function App() {
       nome: produto,
       comprado: false,
     };
+
+    setLista([...lista, novoProduto]);
+    setProduto("");
   
     const novaLista = [...lista, novoProduto];
       setLista(novaLista);
@@ -45,7 +76,15 @@ export default function App() {
         return item;
       });
       setLista(novaLista);
+
+      
     }
+
+    function limparComprados(comprados: boolean){
+      setLista(lista.filter((item) => item.comprado !== comprados));
+    }
+
+    
 
   return (
     <SafeAreaProvider>
@@ -53,7 +92,7 @@ export default function App() {
         <StatusBar style="auto" /> 
         <Header />
         <Form adicionarProduto={adicionarProduto} produto={produto} setProduto={setProduto}/> 
-        <ListaItens produtos ={lista}/>
+        <ListaItens produtos ={lista} remover ={remover} mudarComprado={mudarComprado} limparComprados= {limparComprados} />
       </SafeAreaView>
     </SafeAreaProvider>
   );

@@ -5,8 +5,8 @@ import { useState } from "react";
 import { ProdutoItem } from "../../interfaces/ProdutoItem";
 import ProdutoListaItem from "../ProdutoListaItem/ProdutoListaItem";
 import { colors } from "../colors";
-import {Form} from "../../components/Form";
-import {App} from "../App";
+
+type Aba = "presentes" | "comprados";
 
 export const DATA: ProdutoItem[] = [
   {
@@ -40,12 +40,19 @@ interface ListaItensProps{
   produtos: ProdutoItem[];
   remover: (id:string) => void;
   mudarComprado: (id:string) => void;
+  limparComprados: (comprados: boolean) => void;
 }
 
-export default function ListaItens() {
-  const [active, setActive] = useState("presentes");
+export default function ListaItens( {
+  produtos, remover, mudarComprado, limparComprados, }: ListaItensProps) {
+const [active, setActive] = useState<Aba>("presentes");
 
-  // TODO(aluno): usar este estado para guardar a lista real de produtos (iniciando a partir de DATA ou de dados persistidos em AsyncStorage) e passar funções de adicionar/remover/alternar-comprado para Form e ProdutoListaItem.
+
+   const mostrandoComprados = active === "comprados";
+  const produtosFiltrados = produtos.filter(
+    (item) => item.comprado === mostrandoComprados
+  );
+
   const [produtos, setProdutos] = useState<ProdutoItem[]>([]);
 
   function alterarActiveParaPresentes() {
@@ -88,15 +95,12 @@ export default function ListaItens() {
           <Text
             style={{
               color: active === "comprados" ? colors.azul500 : colors.textSecondary,
-            }}
+            }} >
 
-            onPress={() => concluirTarefa(tarefas.indexOf(tarefa))}> {/*aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa*/}
-            <Text style={styles.botaoConcluirTexto}>
-              {tarefa.status ? '✓' : ' '}
-            </Text>
-          
+                  
             Comprados
           </Text>
+          
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -107,17 +111,7 @@ export default function ListaItens() {
           <Text style={{ color: colors.textSecondary }}>Limpar</Text>
         </TouchableOpacity>
 
-           {/* Botão de concluir tarefa */}
-          <TouchableOpacity
-            style={[
-              styles.botaoConcluir,
-              tarefa.status && styles.botaoConcluirAtivo,
-            ]}
-            onPress={() => concluirTarefa(tarefas.indexOf(tarefa))}>
-            <Text style={styles.botaoConcluirTexto}>
-              {tarefa.status ? '✓' : ' '}
-            </Text>
-          </TouchableOpacity>
+          
           
       </View>
 
