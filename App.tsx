@@ -25,7 +25,7 @@ export default function App() {
         const salvas = await AsyncStorage.getItem(CHAVE);
          if (salvas) setLista(JSON.parse(salvas));
       } catch (e) {
-        console.log('Falha ao carregar a lista', e);
+        console.log('Falha ao carregar a lista :(', e);
       } finally {
         setCarregado(true);
       }
@@ -36,7 +36,7 @@ export default function App() {
   useEffect(() => {
   if (!carregado) return;
   AsyncStorage.setItem(CHAVE, JSON.stringify(lista)).catch((e) =>
-    console.log("Falha ao salvar a lista", e)
+    console.log("Falha ao salvar a lista :(", e)
   );
 }, [lista, carregado]);
   
@@ -64,8 +64,8 @@ export default function App() {
     }
 
     function remover(id: string){
-      const novaLista = lista.filter((item) => item.id !== id);
-      setLista (novaLista);
+     setLista (lista.filter((item) => item.id !== id));
+     
       }
 
     function mudarComprado(id: string){

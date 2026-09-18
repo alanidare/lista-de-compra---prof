@@ -12,9 +12,6 @@ interface FormProps{
 }
 
 export default function Form({produto, setProduto, adicionarProduto}: FormProps) {
-
-  
-    
   return (
     <View style={styles.container}>
       <Text> Adicione um item à lista ;)</Text>
@@ -25,15 +22,11 @@ export default function Form({produto, setProduto, adicionarProduto}: FormProps)
         onChangeText={(texto) => setProduto(texto)}
         placeholder="O que você precisa comprar?"
       />
-
-      
-
-                
+   
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {adicionarProduto()}}
-        // TODO(aluno): ao tocar, adicionar um novo produto à lista (ex.: chamando uma função recebida via props que atualiza o estado da lista em ListaItens/App).
-      >
+        onPress={() => {adicionarProduto()}}>
+          
         <Check color={colors.surface} size={16} />
         <Text style={styles.buttonText}>Adicionar</Text>
       </TouchableOpacity>

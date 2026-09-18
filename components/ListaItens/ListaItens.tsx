@@ -67,7 +67,7 @@ const [active, setActive] = useState<Aba>("presentes");
 
   return (
     <View style={styles.container}>
-      {/* Filtro */}
+
       <View style={styles.topBar}>
         <TouchableOpacity
           style={styles.buttonTopBar}
@@ -105,9 +105,9 @@ const [active, setActive] = useState<Aba>("presentes");
 
         <TouchableOpacity
           style={{ marginLeft: "auto" }}
-          onPress={() => {}}
-          // TODO(aluno): implementar a ação de "Limpar" (ex.: remover os itens marcados como comprados, atualizando o estado da lista).
-        >
+          onPress={() => limparComprados(mostrandoComprados)}>
+
+
           <Text style={{ color: colors.textSecondary }}>Limpar</Text>
         </TouchableOpacity>
 
@@ -115,13 +115,12 @@ const [active, setActive] = useState<Aba>("presentes");
           
       </View>
 
-      {/* Lista de itens */}
-      {/* TODO(aluno): filtrar DATA/produtos de acordo com "active" (produto.comprado === false para "presentes", === true para "comprados") antes de passar para a FlatList. */}
+      
       <FlatList<ProdutoItem>
-        data={DATA}
+        data={produtosFiltrados}
         keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
-        renderItem={(linha) => <ProdutoListaItem produto={linha.item} />}
+        renderItem={(linha) => <ProdutoListaItem produto={linha.item} remover= {remover} mudarComprado ={mudarComprado} />}
       />
     </View>
   );
